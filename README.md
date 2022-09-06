@@ -1,2 +1,3 @@
 # Group-4
-V1 of the social book for the project
+V1 of the social book app
+Andrew Banks task: 

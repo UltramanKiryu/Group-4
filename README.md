@@ -1,8 +1,8 @@
 # Group-4
 V1 of the social book app Documentation
 
-Team members names- GitHub email:
-  Andrew Banks - godzillamaster58127@gmail.com
+Team members names/ netID/ GitHub email:
+  Andrew Banks -alb1424 - godzillamaster58127@gmail.com
   Calvin Brinkman - calvinbrinkman30@gmail.com
   Colin klein - colink7112@yahoo.com
 
@@ -19,3 +19,4 @@ Django as the web based framework use to create the website
 Python- the language the team will use
 Pycharm- as the IDE to use Django
 
+Roles for the Team:

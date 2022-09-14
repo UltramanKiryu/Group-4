@@ -5,7 +5,7 @@ Team members names/ netID/ GitHub email:
   Andrew Banks -alb1424 - godzillamaster58127@gmail.com
   Calvin Brinkman - cdb1055 - calvinbrinkman30@gmail.com
   Colin klein - cik14 - colink7112@yahoo.com
-  Rojal Brarily -rb2298- Rojalbaraily07@gmail.com
+  Rojal-bishwokarma -rb2298- Rojalbaraily07@gmail.com
 
 Overall objective of the project:
 The objective is to create a facebook like social media app/ website
@@ -21,3 +21,7 @@ Python- the language the team will use
 Pycharm- as the IDE to use Django
 
 Roles for the Team:
+Andrew Banks
+Calvin Brinkman
+Colin Klein
+Rojal-Bishwokarma

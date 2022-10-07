@@ -41,7 +41,22 @@ def delete(request):
 
 @login_required(login_url='signin')
 def edit(request):
-    pass
+    if request.method == 'POST':
+        username = request.user.username
+        post_id = request.POST.get('post_id')
+
+        post = Post.objects.get(id=post_id)
+        if post.user == username:
+            image = request.FILES.get('image_upload')
+            caption = request.POST['caption']
+
+            if image:
+                post.image = image
+            if caption:
+                post.caption = caption
+            post.save()
+
+    return redirect('/')
 
 @login_required(login_url='signin')
 def settings(request):

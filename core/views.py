@@ -29,6 +29,21 @@ def upload(request):
         return redirect('/')
 
 @login_required(login_url='signin')
+def delete(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+    if post.user == username:
+        post.delete()
+
+    return redirect('/')
+
+@login_required(login_url='signin')
+def edit(request):
+    pass
+
+@login_required(login_url='signin')
 def settings(request):
     user_profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':

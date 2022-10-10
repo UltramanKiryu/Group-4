@@ -25,3 +25,10 @@ Andrew Banks- Team Manager <br />
 Calvin Brinkman- Researcher <br />
 Colin Klein- Frontend Developer <br />
 Rojal Bishwokarma- Backend Developer
+
+Build & Run:
+python -m venv .
+python -m pip install Django
+python -m pip install Pillow
+python manage.py migrate
+python manage.py runserver

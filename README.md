@@ -2,10 +2,11 @@
 V1 of the social book app Documentation
 
 Team members names/ netID/ GitHub email: <br />
-  Andrew Banks -alb1424 - godzillamaster58127@gmail.com <br />
-  Calvin Brinkman - cdb1055 - calvinbrinkman30@gmail.com <br />
-  Colin klein - cik14 - colink7112@yahoo.com <br />
-  Rojal Bishwokarma -rb2298- Rojalbaraily07@gmail.com <br />
+  Andrew Banks      - alb1424 - godzillamaster58127@gmail.com <br />
+  Calvin Brinkman   - cdb1055 - calvinbrinkman30@gmail.com <br />
+  Colin klein       - cik14   - colink7112@yahoo.com <br />
+  Rojal Bishwokarma - rb2298  - Rojalbaraily07@gmail.com <br />
+  Logan Christopher - clc1085 - logan.christopher@comcast.net <br />
 
 Overall objective of the project: <br />
 The objective is to create a facebook like social media app/ website <br />

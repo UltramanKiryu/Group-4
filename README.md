@@ -29,8 +29,13 @@ Rojal Bishwokarma- Backend Developer <br />
 Logan Christopher- Developer <br />
 
 Build & Run: <br />
+// create virtual environment <br />
 python -m venv . <br />
+
+// install dependencies <br />
 python -m pip install Django <br />
 python -m pip install Pillow <br />
+
+// create database models & run server <br />
 python manage.py migrate <br />
 python manage.py runserver <br />

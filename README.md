@@ -24,11 +24,12 @@ Roles for the Team: <br />
 Andrew Banks- Team Manager <br />
 Calvin Brinkman- Researcher <br />
 Colin Klein- Frontend Developer <br />
-Rojal Bishwokarma- Backend Developer
+Rojal Bishwokarma- Backend Developer <br />
+Logan Christopher- Developer <br />
 
-Build & Run:
-python -m venv .
-python -m pip install Django
-python -m pip install Pillow
-python manage.py migrate
-python manage.py runserver
+Build & Run: <br />
+python -m venv . <br />
+python -m pip install Django <br />
+python -m pip install Pillow <br />
+python manage.py migrate <br />
+python manage.py runserver <br />

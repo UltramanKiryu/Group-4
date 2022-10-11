@@ -1,4 +1,6 @@
-/media/
+social_book/wwwroot/media/post_images
+social_book/wwwroot/media/profile_images
+core/migrations/*
 pyvenv.cfg
 /bin/
 /lib/

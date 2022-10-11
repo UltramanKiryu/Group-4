@@ -19,7 +19,7 @@ button {
 }
 
 span.button, button.button {
-  background-color: #be185d;
+  background-color: #000000;
   top: 0;
   color: #fff;
   position: relative;
@@ -40,7 +40,7 @@ span.button, button.button {
 }
 
 input[type="button"], input[type="submit"] {
-  background-color: #be185d;
+  background-color: #000000;
   top: 0;
   padding: 10px 20px;
   line-height: 24px;
@@ -60,7 +60,7 @@ input[type="button"], input[type="submit"] {
 }
 
 a.button {
-  background-color: #be185d;
+  background-color: #000000;
   top: 0;
   padding: 8px 18px;
   line-height: 22px;
@@ -607,7 +607,7 @@ button {
 }
 
 a {
-  color: #be185d;
+  color: #000000;
   -webkit-transition: 0.3s;
   transition: 0.3s;
   outline: none !important;
@@ -700,7 +700,7 @@ img {
 
 .keyword {
   background-color: rgba(190, 24, 93, 0.07);
-  color: #be185d;
+  color: #000000;
   display: inline-block;
   float: left;
   padding: 0;
@@ -815,7 +815,7 @@ img {
   width: 36px;
   padding: 0;
   color: #fff;
-  background-color: #be185d;
+  background-color: #000000;
   border-radius: 4px;
   margin: 6px;
   font-size: 19px;
@@ -897,8 +897,8 @@ input.keyword-input {
 }
 
 .checkbox input:checked + label span.checkbox-icon {
-  border-color: #be185d;
-  background-color: #be185d;
+  border-color: #000000;
+  background-color: #000000;
 }
 
 .checkbox input:checked + label span.checkbox-icon:after {
@@ -953,7 +953,7 @@ input.keyword-input {
 }
 
 .radio input[type="radio"] + label .radio-label:after {
-  background-color: #be185d;
+  background-color: #000000;
   content: "";
   top: 3px;
   left: 0;
@@ -977,8 +977,8 @@ input.keyword-input {
 }
 
 .radio input[type="radio"]:checked + label .radio-label {
-  background-color: #be185d;
-  border-color: #be185d;
+  background-color: #000000;
+  border-color: #000000;
   -webkit-box-shadow: inset 0 0 0 3px #fff;
           box-shadow: inset 0 0 0 3px #fff;
 }
@@ -1170,7 +1170,7 @@ label.switch {
 }
 
 input:checked + .switch-button {
-  background-color: #be185d;
+  background-color: #000000;
 }
 
 input:checked + .switch-button:before {
@@ -1760,7 +1760,7 @@ header .header_inner .right-side .header-avatar {
 }
 
 .header_dropdown.profile_dropdown ul a:hover {
-  color: #be185d;
+  color: #000000;
   background-color: transparent;
 }
 
@@ -1936,7 +1936,7 @@ header .uk-dropdown {
   padding: 0 20px;
   margin-bottom: 5px;
   display: block;
-  color: #be185d;
+  color: #000000;
   font-weight: 600;
   font-size: 14px;
 }
@@ -1988,13 +1988,13 @@ header .uk-dropdown {
 .sidebar .sidebar_inner ul li.active-submenu a i,
 .sidebar .sidebar_inner ul li.active a i,
 .sidebar .sidebar_inner ul li:hover a i {
-  color: #be185d;
+  color: #000000;
 }
 
 .sidebar .sidebar_inner ul li.active-submenu a,
 .sidebar .sidebar_inner ul li:hover a,
 .sidebar .sidebar_inner ul li.active a {
-  color: #be185d;
+  color: #000000;
 }
 
 .sidebar .sidebar_inner ul li span.nav-tag {
@@ -2006,7 +2006,7 @@ header .uk-dropdown {
   text-align: center;
   color: #fff;
   font-size: 11px;
-  background-color: #be185d;
+  background-color: #000000;
   border-radius: 50%;
   position: relative;
   margin: 0 0 0 4px;

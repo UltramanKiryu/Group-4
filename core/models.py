@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 import uuid
 from datetime import datetime
 
+# https://docs.djangoproject.com/en/1.11/ref/contrib/auth/#django.contrib.auth.models.User
 User = get_user_model()
 
 # Create your models here.

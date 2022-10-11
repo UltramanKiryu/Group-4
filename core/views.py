@@ -75,18 +75,6 @@ def upload(request):
     else:
         return redirect('/')
 
-# delete post
-@login_required(login_url='signin')
-def delete(request):
-    username = request.user.username
-    post_id = request.GET.get('post_id')
-
-    post = Post.objects.get(id=post_id)
-    if post.user == username:
-        post.delete()
-
-    return redirect('/')
-
 # edit post
 @login_required(login_url='signin')
 def edit(request):
@@ -104,6 +92,18 @@ def edit(request):
             if caption:
                 post.caption = caption
             post.save()
+
+    return redirect('/')
+
+# delete post
+@login_required(login_url='signin')
+def delete(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+    if post.user == username:
+        post.delete()
 
     return redirect('/')
 

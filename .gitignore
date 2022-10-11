@@ -2,6 +2,7 @@
 /social_book/media/profile_images
 /social_book/db.social_book
 /core/migrations/*
+/include/
 /bin/
 /lib/
 pyvenv.cfg

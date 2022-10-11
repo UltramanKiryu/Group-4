@@ -1,7 +1,7 @@
-social_book/wwwroot/media/post_images
-social_book/wwwroot/media/profile_images
-core/migrations/*
-pyvenv.cfg
+/social_book/media/post_images
+/social_book/media/profile_images
+/social_book/db.social_book
+/core/migrations/*
 /bin/
 /lib/
-db.sqlite3
+pyvenv.cfg

@@ -69,6 +69,7 @@ def upload(request):
         return redirect('/')
 
 @login_required(login_url='signin')
+
 def search(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)

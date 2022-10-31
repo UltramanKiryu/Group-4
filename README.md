@@ -26,4 +26,18 @@ Andrew Banks- Team Manager <br />
 Calvin Brinkman- Researcher <br />
 Colin Klein- Frontend Developer <br />
 Rojal Bishwokarma- Backend Developer<br />
-Logan Christopher - 
+Logan Christopher- Developer<br />
+<br />
+Build & Run:<br />
+// create virtual environment & install dependencies<br />
+python -m venv .<br />
+source bin/activate<br />
+python -m pip install Django<br />
+python -m pip install Pillow<br />
+
+// run server<br />
+python manage.py runserver<br />
+<br />
+When changing database models apply migrations before running server again:<br />
+python manage.py migrate<br />
+python manage.py runserver <br />

@@ -5,5 +5,7 @@
 /include/
 /bin/
 /lib/
-pyvenv.cfg
-.DS_Store
+**/__init__.py
+**/__pycache__/
+**/pyvenv.cfg
+**/.DS_Store

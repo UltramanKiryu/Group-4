@@ -29,7 +29,7 @@ class TestCases(TestCase):
         request._messages = messages.storage.default_storage(request)
         request.user = self.user
 
-    # return the first message in storage as a string
+    # return the first message in storage or None if empty
     def get_message(self, request):
         storage = messages.get_messages(request)
         message = None
@@ -37,8 +37,8 @@ class TestCases(TestCase):
             break
         return str(message)
 
+    # request to signin as the user created in setup
     def test_signin_success(self):
-        # craft a post request to signin as the user created in setup
         request = self.factory.post('/signin', {'username': self.user.username, 'password': '123'})
         self.AddMiddleware(request)
 
@@ -48,8 +48,8 @@ class TestCases(TestCase):
         # 302 redirect to / on success
         self.assertRedirects(response, '/', target_status_code=302)
         
+    # request to signin with the wrong username
     def test_signin_failure_username(self):
-        # craft a post request to signin with the wrong username
         request = self.factory.post('/signin', {'username': 'logan2', 'password': '123'})
         self.AddMiddleware(request)
 
@@ -57,12 +57,12 @@ class TestCases(TestCase):
         response.client = Client()
         message = self.get_message(request)
 
-        # respond with message and redirect to /signin on failure
+        # responds with message and redirect to /signin on failure
         self.assertEqual(message, 'Credentials Invaild')
         self.assertRedirects(response, '/signin')
 
+    # request to signin with the wrong password
     def test_signin_failure_password(self):
-        # craft a post request to signin with the wrong username
         request = self.factory.post('/signin', {'username': self.user.username, 'password': '124'})
         self.AddMiddleware(request)
 
@@ -70,6 +70,8 @@ class TestCases(TestCase):
         response.client = Client()
         message = self.get_message(request)
 
-        # respond with message and redirect to /signin on failure
+        # responds with message and redirect to /signin on failure
         self.assertEqual(message, 'Credentials Invaild')
         self.assertRedirects(response, '/signin')
+
+    

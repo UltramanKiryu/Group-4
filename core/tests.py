@@ -4,7 +4,6 @@ from django.contrib.messages.middleware import MessageMiddleware
 from django.test import RequestFactory, TestCase, Client
 from django.contrib import messages
 
-
 from core.models import Profile
 from core.views import signin
 
@@ -21,26 +20,10 @@ class TestCases(TestCase):
         self.profile.bio = 'tests are the best'
         self.profile.location = 'earth'
 
-    # add default middleware config to request
-    def AddMiddleware(self, request):
-        # add middleware manually
-        middleware = SessionMiddleware(request)
-        middleware.process_request(request)
-        request._messages = messages.storage.default_storage(request)
-        request.user = self.user
-
-    # return the first message in storage or None if empty
-    def get_message(self, request):
-        storage = messages.get_messages(request)
-        message = None
-        for message in storage:
-            break
-        return str(message)
-
     # request to signin as the user created in setup
     def test_signin_success(self):
         request = self.factory.post('/signin', {'username': self.user.username, 'password': '123'})
-        self.AddMiddleware(request)
+        AddMiddleware(self, request)
 
         response = signin(request)
         response.client = Client()
@@ -51,11 +34,11 @@ class TestCases(TestCase):
     # request to signin with the wrong username
     def test_signin_failure_username(self):
         request = self.factory.post('/signin', {'username': 'logan2', 'password': '123'})
-        self.AddMiddleware(request)
+        AddMiddleware(self, request)
 
         response = signin(request)
         response.client = Client()
-        message = self.get_message(request)
+        message = get_message(request)
 
         # responds with message and redirect to /signin on failure
         self.assertEqual(message, 'Credentials Invaild')
@@ -64,14 +47,30 @@ class TestCases(TestCase):
     # request to signin with the wrong password
     def test_signin_failure_password(self):
         request = self.factory.post('/signin', {'username': self.user.username, 'password': '124'})
-        self.AddMiddleware(request)
+        AddMiddleware(self, request)
 
         response = signin(request)
         response.client = Client()
-        message = self.get_message(request)
+        message = get_message(request)
 
         # responds with message and redirect to /signin on failure
         self.assertEqual(message, 'Credentials Invaild')
         self.assertRedirects(response, '/signin')
 
-    
+# Helpers ---------------------------------------------------------------
+
+# add default middleware config to request
+def AddMiddleware(self, request):
+    # add middleware manually
+    middleware = SessionMiddleware(request)
+    middleware.process_request(request)
+    request._messages = messages.storage.default_storage(request)
+    request.user = self.user
+
+# return the first message in storage or None if empty
+def get_message(request):
+    storage = messages.get_messages(request)
+    message = None
+    for message in storage:
+        break
+    return str(message)

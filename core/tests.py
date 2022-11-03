@@ -19,8 +19,6 @@ class TestCases(TestCase):
         self.profile.bio = "tests are the best"
         self.profile.location = "earth"
 
-        self.user.save()
-        self.profile.save()
         print("[*] Created new User\n  username: "+self.user.username+"\n  email: "+self.user.email+"\n  password: 123")
         print("[*] Created new Profile\n  id: "+str(self.user.id)+"\n  bio: "+self.profile.bio+"\n  location: "+self.profile.location)
 
@@ -33,7 +31,6 @@ class TestCases(TestCase):
         # add session middleware manually
         middleware = SessionMiddleware(request)
         middleware.process_request(request)
-        request.session.save()
 
         # simulate a logged-in user by setting request.user manually.
         request.user = self.user

@@ -35,7 +35,8 @@ source bin/activate <br />
 python -m pip install Django <br />
 python -m pip install Pillow <br />
 
-// run server <br />
+// Creates db tables & run server <br />
+manage.py migrate --run-syncdb <br />
 python manage.py runserver <br />
 
 When changing database models apply migrations before running server again: <br />

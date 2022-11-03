@@ -8,6 +8,7 @@ from core.views import signin
 # https://docs.djangoproject.com/en/4.1/intro/tutorial05/
 class TestCases(TestCase):
     def setUp(self):
+        print("\n[*] Running setup...")
         # every test needs access to RequestFactory to build requests
         # https://docs.djangoproject.com/en/4.1/topics/testing/advanced/#django.test.RequestFactory
         self.factory = RequestFactory()
@@ -20,11 +21,11 @@ class TestCases(TestCase):
 
         self.user.save()
         self.profile.save()
-        print("[*] Created new User    -> username: "+self.user.username+", email: "+self.user.email+", password: "+self.user.password)
-        print("[*] Created new Profile -> id: "+str(self.user.id)+", bio: "+self.profile.bio+", location: "+self.profile.location)
+        print("[*] Created new User\n  username: "+self.user.username+"\n  email: "+self.user.email+"\n  password: 123")
+        print("[*] Created new Profile\n  id: "+str(self.user.id)+"\n  bio: "+self.profile.bio+"\n  location: "+self.profile.location)
 
-    def test_signin(self):
-        print("\n[*] Testing signin...")
+    def test_signin_success(self):
+        print("\n[*] Testing signin success...")
 
         # craft a post request to signin as the user created in setup
         request = self.factory.post('/signin', {'username': 'logan', 'password': '123'})

@@ -42,3 +42,6 @@ python manage.py runserver <br />
 When changing database models apply migrations before running server again: <br />
 python manage.py migrate <br />
 python manage.py runserver <br />
+
+Testing: <br />
+python manage.py test core <br />

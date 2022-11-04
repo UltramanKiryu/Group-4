@@ -5,7 +5,7 @@ from django.test import RequestFactory, TestCase, Client
 from django.contrib import messages
 
 from core.models import Profile
-from core.views import signin, logout
+from core.views import signup, signin, logout
 
 # https://docs.djangoproject.com/en/4.1/intro/tutorial05/
 class TestCases(TestCase):
@@ -19,6 +19,60 @@ class TestCases(TestCase):
         self.profile = Profile.objects.create(user=self.user, id_user=self.user.id)
         self.profile.bio = 'tests are the best'
         self.profile.location = 'earth'
+
+    # def test_settings_success(self):
+
+    # def test_settings_failure(self):
+
+    # request to signup 
+    def test_signup_success(self):
+        request = self.factory.post('/signup', {'username': 'logan2', 'email':'email@email.com', 'password': '123', 'password2': '123'})
+        AddMiddleware(request)
+
+        response = signup(request)
+        response.client = Client()
+        
+        # 302 redirect to /settings on success
+        self.assertRedirects(response, '/settings', target_status_code=302)
+
+    # request to signup with non-matching passwords
+    def test_signup_failure_password_match(self):
+        request = self.factory.post('/signup', {'username': 'logan2', 'email':'email@email.com', 'password': '123', 'password2': '1234'})
+        AddMiddleware(request)
+
+        response = signup(request)
+        response.client = Client()
+        message = get_message(request)
+        
+        # responds with message and redirect to /signup on failure
+        self.assertEqual(message, 'Password Not Matching')
+        self.assertRedirects(response, '/signup')
+
+    # request to signup with a taken email
+    def test_signup_failure_email_taken(self):
+        request = self.factory.post('/signup', {'username': 'logan2', 'email':self.user.email, 'password': '123', 'password2': '123'})
+        AddMiddleware(request)
+
+        response = signup(request)
+        response.client = Client()
+        message = get_message(request)
+        
+        # responds with message and redirect to /signup on failure
+        self.assertEqual(message, 'Email Taken')
+        self.assertRedirects(response, '/signup')
+
+    # request to signup with a taken username
+    def test_signup_failure_username_taken(self):
+        request = self.factory.post('/signup', {'username': self.user.username, 'email':'email@email.com', 'password': '123', 'password2': '123'})
+        AddMiddleware(request)
+
+        response = signup(request)
+        response.client = Client()
+        message = get_message(request)
+        
+        # responds with message and redirect to /signup on failure
+        self.assertEqual(message, 'Username Taken')
+        self.assertRedirects(response, '/signup')
 
     # request to signin as the user created in setup
     def test_signin_success(self):

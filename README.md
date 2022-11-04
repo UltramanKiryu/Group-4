@@ -35,7 +35,7 @@ source bin/activate <br />
 python -m pip install Django <br />
 python -m pip install Pillow <br />
 
-// Creates db tables & run server <br />
+// create db tables & run server <br />
 manage.py migrate --run-syncdb <br />
 python manage.py runserver <br />
 
@@ -47,12 +47,12 @@ Testing: <br />
 python manage.py test core <br />
 
 Hosting: <br />
-Create an ngrok account and navigate below to install the ngrok command line tool and aquire an auth token. <br />
+// create an ngrok account and navigate below to install the ngrok command line tool and aquire an auth token <br />
 https://dashboard.ngrok.com/get-started/setup <br />
 
-Run python server & ngrok tunnel: <br />
+// run python server & ngrok tunnel <br />
 python manage.py runserver <br />
 ngrok http port <br />
 
-Copy generated link and paste into settings.py: <br />
+// copy generated link and paste into settings.py <br />
 ALLOWED_HOSTS = ['6c5a-64-82-164-42.ngrok.io'] <br />

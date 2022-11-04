@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase, Client
 from django.contrib import messages
 
+from django.contrib.auth.models import User
 from core.models import Profile
 from core.views import settings, signup, signin, logout
 

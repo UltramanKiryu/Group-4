@@ -52,8 +52,12 @@
 
 					{% if user_object.username == user.username %}
 					<a href="/settings" data-ripple="">Account Settings</a>
-					{% else %}
-					<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">{{button_text}}</button></a>
+					{% elif user_re == 2 %}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Pending</button></a>
+					{% elif user_re == 1 %}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Unfollow</button></a>
+					{% elif user_re == 0%}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Follow</button></a>
 					{% endif %}
 					</div>
 				</form>
@@ -87,6 +91,7 @@
 									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>{{user_profile.user.username}}</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
 									  <!--<span>Group Admin</span>-->
 									</li>
+
 									<!--<li>
 										<a class="" href="javascript:void(0)" title="" data-ripple="">Go live!</a>
 										<a class="" href="javascript:void(0)" title="" data-ripple="">Music</a>
@@ -113,6 +118,19 @@
 		<section>
 			<div class="bio">
 				{{user_profile.bio}}
+				<br />
+				Follower's Request
+				{% if user_object.username == user.username %}
+				<form action="/friends" method="POST">
+					{% csrf_token %}
+				{% for suggestion in suggestions_username_profile_list %}
+					<input type="hidden" value="{{suggestion.user}}" name ="follower"/>  {{suggestion.user}}
+					<button type="submit" name="answer" value="yes" style="background-color: white; border: #ffc0cb;">Yes</button>
+					<button type="submit" name="answer" value="no" style="background-color: white; border: #ffc0cb;">No</button>
+					<br />
+				{% endfor %}
+				</form>
+				{% endif %}
 			</div>
 		</section>
 		
@@ -129,7 +147,6 @@
 									
 								</aside>
 							</div><!-- sidebar -->
-							
 
 
 
@@ -160,6 +177,7 @@
 									
 								</aside>
 							</div><!-- sidebar -->
+
 						</div>	
 					</div>
 				</div>

@@ -125,7 +125,13 @@ def profile(request, pk):
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
 
+    comments = []
 
+    for posts in user_posts:
+        comment_list = Comment.objects.filter(post_id=posts.id)
+        comments.append(comment_list)
+
+    post_comments = list(chain(*comments))
 
     follower = request.user.username
     user = pk
@@ -171,7 +177,8 @@ def profile(request, pk):
         'user_followers': user_followers,
         'user_following': user_following,
         'user_re': user_re,
-        'suggestions_username_profile_list': suggestions_username_profile_list
+        'suggestions_username_profile_list': suggestions_username_profile_list,
+        'post_comments': post_comments,
     }
     return render(request,'profile.html',context)
 
@@ -201,26 +208,6 @@ def follow(request):
         return redirect('/')
 
 @login_required(login_url='signin')
-def delete(request):
-    username = request.user.username
-    post_id = request.GET.get('post_id')
-
-    post = Post.objects.get(id=post_id)
-
-    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
-    if like_filter ==None:
-        new_like = LikePost.objects.create(post_id=post_id, username=username)
-        new_like.save()
-        post.no_of_likes = post.no_of_likes+1
-        post.save()
-        return redirect('/')
-    else:
-        like_filter.delete()
-        post.no_of_likes = post.no_of_likes-1
-        post.save()
-        return redirect('/')
-
-@login_required(login_url='signin')
 def comment_post(request):
     if request.method == 'POST':
         username = request.user.username
@@ -231,61 +218,6 @@ def comment_post(request):
         comment.save()
 
         return redirect('/')
-    else:
-        return redirect('/')
-
-@login_required(login_url='signin')
-def profile(request, pk):
-    user_object = User.objects.get(username=pk)
-    user_profile = Profile.objects.get(user=user_object)
-    user_posts = Post.objects.filter(user=pk)
-    user_post_length = len(user_posts)
-
-    comments = []
-
-    for posts in user_posts:
-        comment_list = Comment.objects.filter(post_id=posts.id)
-        comments.append(comment_list)
-
-    post_comments = list(chain(*comments))
-
-    follower = request.user.username
-    user = pk
-
-    if FollowersCount.objects.filter(follower=follower, user=user).first():
-        button_text = 'Unfollow'
-    else:
-        button_text = 'Follow'
-
-    user_followers = len(FollowersCount.objects.filter(user=pk))
-    user_following = len(FollowersCount.objects.filter(follower=pk))
-    context = {
-        'user_object': user_object,
-        'user_profile': user_profile,
-        'user_posts': user_posts,
-        'user_post_length': user_post_length,
-        'button_text': button_text,
-        'user_followers': user_followers,
-        'user_following': user_following,
-        'post_comments': post_comments,
-    }
-    return render(request,'profile.html',context)
-
-@login_required(login_url='signin')
-def follow(request):
-    if request.method == 'POST':
-        follower = request.POST['follower']
-        user = request.POST['user']
-
-        if FollowersCount.objects.filter(follower=follower, user=user).first():
-            delete_follower = FollowersCount.objects.get(follower=follower, user=user)
-            delete_follower.delete()
-            return redirect('/profile/'+user)
-        else:
-            new_follower = FollowersCount.objects.create(follower=follower, user=user)
-            new_follower.save()
-            return redirect('/profile/'+user)
-
     else:
         return redirect('/')
 

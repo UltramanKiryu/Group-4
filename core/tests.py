@@ -12,9 +12,7 @@ class FollowTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username='logan', email='logan@email.com', password='123')
-        self.profile = Profile.objects.create(user=self.user, id_user=self.user.id)
         self.user2 = User.objects.create_user(username='logan2', email='logan2@email.com', password='321')
-        self.profile2 = Profile.objects.create(user=self.user2, id_user=self.user2.id)
 
     # request to follow user2 as user
     def test_follow(self):
@@ -32,7 +30,7 @@ class FollowTests(TestCase):
 
         # verify model updated
         following = str(FollowersCount.objects.get(follower=self.user, user=self.user2))
-        self.assertEqual(following, 'logan2')
+        self.assertEqual(following, self.user2.username)
 
     # request to unfollow user2 as user
     def test_unfollow(self):
@@ -66,7 +64,6 @@ class SettingsTests(TestCase):
 
         # simulate authenticated user
         request.user = self.user
-
         response = settings(request)
         response.client = Client()
         
@@ -84,11 +81,11 @@ class SignUpTests(TestCase):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username='logan', email='logan@email.com', password='123')
         self.profile = Profile.objects.create(user=self.user, id_user=self.user.id)
+        self.new_user = User(username='logan2', email='email@email.com', password='123')
 
     # request to signup
     def test_signup(self):
-        new_user = User(username='logan2', email='email@email.com', password='123')
-        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': new_user.password})
+        request = self.factory.post('/signup', {'username': self.new_user.username, 'email': self.new_user.email, 'password': self.new_user.password, 'password2': self.new_user.password})
         AddMiddleware(request)
 
         response = signup(request)
@@ -98,9 +95,9 @@ class SignUpTests(TestCase):
         self.assertRedirects(response, '/settings', target_status_code=302)
 
         # verify models created
-        user = User.objects.get(username=new_user.username)
-        self.assertTrue(user.check_password(new_user.password))
-        self.assertEqual(user.email, new_user.email)
+        user = User.objects.get(username=self.new_user.username)
+        self.assertTrue(user.check_password(self.new_user.password))
+        self.assertEqual(user.email, self.new_user.email)
         
         profile = Profile.objects.get(user=user)
         self.assertEqual(profile.id_user, user.id)
@@ -109,8 +106,7 @@ class SignUpTests(TestCase):
 
     # request to signup with non-matching passwords
     def test_non_matching_passwords(self):
-        new_user = User(username='logan2', email='email@email.com', password='123')
-        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': '1234'})
+        request = self.factory.post('/signup', {'username': self.new_user.username, 'email': self.new_user.email, 'password': self.new_user.password, 'password2': '1234'})
         AddMiddleware(request)
 
         response = signup(request)
@@ -123,8 +119,7 @@ class SignUpTests(TestCase):
 
     # request to signup with a taken email
     def test_email_taken(self):
-        new_user = User(username='logan2', email='logan@email.com', password='123')
-        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': new_user.password})
+        request = self.factory.post('/signup', {'username': self.new_user.username, 'email': self.user.email, 'password': self.new_user.password, 'password2': self.new_user.password})
         AddMiddleware(request)
 
         response = signup(request)
@@ -137,8 +132,7 @@ class SignUpTests(TestCase):
 
     # request to signup with a taken username
     def test_username_taken(self):
-        new_user = User(username='logan', email='email@email.com', password='123')
-        request = self.factory.post('/signup', {'username': new_user.username, 'email': new_user.email, 'password': new_user.password, 'password2': new_user.password})
+        request = self.factory.post('/signup', {'username': self.user.username, 'email': self.new_user.email, 'password': self.new_user.password, 'password2': self.new_user.password})
         AddMiddleware(request)
 
         response = signup(request)
@@ -154,7 +148,6 @@ class SignInTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username='logan', email='logan@email.com', password='123')
-        self.profile = Profile.objects.create(user=self.user, id_user=self.user.id)
 
     # request to signin as the user created in setup
     def test_signin(self):
@@ -201,16 +194,18 @@ class LogoutTests(TestCase):
 
     # request to logout the user created at setup
     def test_logout(self):
+        # logout user
         request = self.factory.get('/logout')
         AddMiddleware(request)
 
         # simulate authenticated user
         request.user = self.user
-
         response = logout(request)
         response.client = Client()
 
+        # responds with redirect to /signin on success
         self.assertRedirects(response, '/signin')
+
 
 # Helpers ---------------------------------------------------------------
 

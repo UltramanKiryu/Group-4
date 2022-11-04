@@ -57,10 +57,21 @@
                             </div>-->
 
                             <div class="col-span-2">
+                                <label for=""> Update Name</label>
+                                <div class="display: flex flex-direction: row">
+                                     <input type="text" name ="first_name" value="{{user_profile.user.first_name}}" class="shadow-none bg-gray-100 mr-2">
+                                     <input type="text" name ="last_name" value="{{user_profile.user.last_name}}" class="shadow-none bg-gray-100">
+                                </div>
+                            </div>
+                           <div class="col-span-2">
                                 <label for=""> Profile Image</label>
                                 <img width="100" height="100" src ="{{user_profile.profileimg.url}}"/>
                                 <input type="file" name="image" value="{{user_profile.profileimg}}" class="shadow-none bg-gray-100">
                             </div>
+                           <div class="col-span-2">
+                               <label for=""> Update Birthday</label>
+                               <input type="date" name ="birthday" value="{{user_profile.birthday|date:'Y-m-d' }}" class="shadow-none bg-gray-100">
+                           </div>
                             <div class="col-span-2">
                                 <label for="about">Bio</label>
                                 <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>

@@ -1,11 +1,10 @@
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.contrib.messages.middleware import MessageMiddleware
 from django.test import RequestFactory, TestCase, Client
 from django.contrib import messages
 
 from core.models import Profile
-from core.views import signup, signin, logout
+from core.views import settings, signup, signin, logout
 
 # https://docs.djangoproject.com/en/4.1/intro/tutorial05/
 class TestCases(TestCase):
@@ -20,13 +19,29 @@ class TestCases(TestCase):
         self.profile.bio = 'tests are the best'
         self.profile.location = 'earth'
 
-    # def test_settings_success(self):
+    # request to update settings
+    def test_settings_success(self):
+        request = self.factory.post('/settings', {'bio': 'new bio', 'location': 'here'})
+        AddMiddleware(request)
 
-    # def test_settings_failure(self):
+        # simulate authenticated user
+        request.user = self.user
 
-    # request to signup 
+        response = settings(request)
+        response.client = Client()
+        
+        # 302 redirect to /settings on success
+        self.assertRedirects(response, '/settings', target_status_code=302)
+
+        # verify model updated
+        profile = Profile.objects.get(user=self.user)
+        self.assertEqual(profile.bio, 'new bio')
+        self.assertEqual(profile.location, 'here')
+
+    # request to signup
     def test_signup_success(self):
-        request = self.factory.post('/signup', {'username': 'logan2', 'email':'email@email.com', 'password': '123', 'password2': '123'})
+        new_user = User(username='logan2', email='email@email.com', password='123')
+        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': new_user.password})
         AddMiddleware(request)
 
         response = signup(request)
@@ -35,9 +50,20 @@ class TestCases(TestCase):
         # 302 redirect to /settings on success
         self.assertRedirects(response, '/settings', target_status_code=302)
 
+        # verify models created
+        user = User.objects.get(username=new_user.username)
+        self.assertEqual(user.email, new_user.email)
+        
+        profile = Profile.objects.get(user=user)
+        self.assertEqual(profile.user, user)
+        self.assertEqual(profile.id_user, user.id)
+        self.assertEqual(profile.bio, '')
+        self.assertEqual(profile.location, '')
+
     # request to signup with non-matching passwords
     def test_signup_failure_password_match(self):
-        request = self.factory.post('/signup', {'username': 'logan2', 'email':'email@email.com', 'password': '123', 'password2': '1234'})
+        new_user = User(username='logan2', email='email@email.com', password='123')
+        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': '1234'})
         AddMiddleware(request)
 
         response = signup(request)
@@ -50,7 +76,8 @@ class TestCases(TestCase):
 
     # request to signup with a taken email
     def test_signup_failure_email_taken(self):
-        request = self.factory.post('/signup', {'username': 'logan2', 'email':self.user.email, 'password': '123', 'password2': '123'})
+        new_user = User(username='logan2', email='logan@email.com', password='123')
+        request = self.factory.post('/signup', {'username': new_user.username, 'email':new_user.email, 'password': new_user.password, 'password2': new_user.password})
         AddMiddleware(request)
 
         response = signup(request)
@@ -63,7 +90,8 @@ class TestCases(TestCase):
 
     # request to signup with a taken username
     def test_signup_failure_username_taken(self):
-        request = self.factory.post('/signup', {'username': self.user.username, 'email':'email@email.com', 'password': '123', 'password2': '123'})
+        new_user = User(username='logan', email='email@email.com', password='123')
+        request = self.factory.post('/signup', {'username': new_user.username, 'email': new_user.email, 'password': new_user.password, 'password2': new_user.password})
         AddMiddleware(request)
 
         response = signup(request)

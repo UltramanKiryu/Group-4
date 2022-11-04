@@ -17,7 +17,7 @@ def index(request):
     user_following_list = [request.user.username]
     feed = []
 
-    user_following = FollowersCount.objects.filter(follower=request.user.username)
+    user_following = FollowersCount.objects.filter(follower=request.user.username, re=1)
 
     for users in user_following:
         user_following_list.append(users.user)
@@ -34,6 +34,7 @@ def index(request):
         comments.append(comment_list)
 
     post_comments = list(chain(*comments))
+    
     # user- suggestion start
     all_users = User.objects.all()
     user_following_all = []
@@ -61,6 +62,7 @@ def index(request):
 
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,'suggestions_username_profile_list': suggestions_username_profile_list[:4], 'post_comments': post_comments})
 
+
 @login_required(login_url='signin')
 def upload(request):
     if request.method == 'POST':
@@ -77,7 +79,6 @@ def upload(request):
         return redirect('/')
 
 @login_required(login_url='signin')
-
 def search(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
@@ -99,6 +100,108 @@ def search(request):
 
 @login_required(login_url='signin')
 def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+    if like_filter ==None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes+1
+        post.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes-1
+        post.save()
+        return redirect('/')
+
+@login_required(login_url='signin')
+def profile(request, pk):
+    user_object = User.objects.get(username=pk)
+    user_profile = Profile.objects.get(user=user_object)
+    user_posts = Post.objects.filter(user=pk)
+    user_post_length = len(user_posts)
+
+
+
+    follower = request.user.username
+    user = pk
+
+    user_following = FollowersCount.objects.filter(re=2)
+
+    user_following_all = []
+    all_users = User.objects.all()
+    feed = []
+    for user in user_following:
+        user_list = User.objects.get(username=user.user)
+        user_following_all.append(user_list)
+    new_suggestions_list = [x for x in list(all_users) if (len(FollowersCount.objects.filter(user=request.user.username, re=2,follower=x))==1)]
+    current_user = User.objects.filter(username=request.user.username)
+    final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
+
+    username_profile = []
+    username_profile_list = []
+
+    for users in final_suggestions_list:
+        username_profile.append(users.id)
+
+    for ids in username_profile:
+        profile_lists = Profile.objects.filter(id_user=ids)
+        username_profile_list.append(profile_lists)
+    suggestions_username_profile_list = list(chain(*username_profile_list))
+
+
+    if 1 == len(FollowersCount.objects.filter(follower=follower, re=2, user=pk)):
+        user_re = 2
+    elif len(FollowersCount.objects.filter(follower=follower, re=1, user=pk)) == 1:
+        user_re = 1
+    else:
+        user_re = 0
+
+    user_followers = len(FollowersCount.objects.filter(user=pk, re=1))
+    user_following = len(FollowersCount.objects.filter(follower=pk, re=1))
+    context = {
+        'user_object': user_object,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+        'user_followers': user_followers,
+        'user_following': user_following,
+        'user_re': user_re,
+        'suggestions_username_profile_list': suggestions_username_profile_list
+    }
+    return render(request,'profile.html',context)
+
+@login_required(login_url='signin')
+def follow(request):
+    if request.method == 'POST':
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+
+
+        if FollowersCount.objects.filter(follower=follower, user=user).first():
+            FollowersCount.re = 0
+            delete_follower = FollowersCount.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+
+
+            return redirect('/profile/'+user)
+        else:
+            new_follower = FollowersCount.objects.create(follower=follower, re=2, user=user)
+            new_follower.save()
+
+
+            return redirect('/profile/'+user)
+
+    else:
+        return redirect('/')
+
+@login_required(login_url='signin')
+def delete(request):
     username = request.user.username
     post_id = request.GET.get('post_id')
 
@@ -239,6 +342,26 @@ def share(request):
     new_post.save()
 
     return redirect('/')
+
+def friends(request):
+    if request.method == 'POST':
+        user = request.user.username
+        follower = request.POST['follower']
+        ans = request.POST['answer']
+        if ans == 'yes':
+            if FollowersCount.objects.filter(user=user, re=2, follower=follower):
+                new_follower = FollowersCount.objects.create(follower=follower, re=1, user=user)
+                new_follower.save()
+                delete_follower = FollowersCount.objects.get(follower=follower, re=2, user=user)
+                delete_follower.delete()
+
+        elif ans == 'no':
+            if FollowersCount.objects.filter(user=user, re=2, follower=follower):
+                delete_follower = FollowersCount.objects.get(follower=follower, re=2, user=user)
+                delete_follower.delete()
+
+        return redirect('/profile/'+user)
+
 
 @login_required(login_url='signin')
 def settings(request):

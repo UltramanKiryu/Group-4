@@ -6,6 +6,7 @@ Team members names/ netID/ GitHub email: <br />
   Calvin Brinkman - cdb1055 - calvinbrinkman30@gmail.com <br />
   Colin klein - cik14 - colink7112@yahoo.com <br />
   Rojal Bishwokarma -rb2298- Rojalbaraily07@gmail.com <br />
+  Logan Christopher - clc1085 - logan.christopher@comcast.net<br />
 
 Overall objective of the project: <br />
 The objective is to create a facebook like social media app/ website <br />
@@ -24,4 +25,19 @@ Roles for the Team: <br />
 Andrew Banks- Team Manager <br />
 Calvin Brinkman- Researcher <br />
 Colin Klein- Frontend Developer <br />
-Rojal Bishwokarma- Backend Developer
+Rojal Bishwokarma- Backend Developer<br />
+Logan Christopher- Developer<br />
+<br />
+Build & Run:<br />
+// create virtual environment & install dependencies<br />
+python -m venv .<br />
+source bin/activate<br />
+python -m pip install Django<br />
+python -m pip install Pillow<br />
+
+// run server<br />
+python manage.py runserver<br />
+<br />
+When changing database models apply migrations before running server again:<br />
+python manage.py migrate<br />
+python manage.py runserver <br />

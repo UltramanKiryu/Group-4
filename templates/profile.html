@@ -5,17 +5,21 @@
 
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-	<title>Profile - {{username}}</title>
+	<title>Profile - {{user_profile.user.username}}</title>
    <!-- <link rel="icon" href="images/fav.png" type="image/png" sizes="16x16"> -->
-    
+
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/color.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -27,36 +31,47 @@
 	<section>
 			<div class="feature-photo">
 				<figure><img src="{% static 'images/resources/timeline-1.jpg' %}" alt=""></figure>
-				<form>
+				<form action="/follow" method="POST">
+					{% csrf_token %}
 					<div class="add-btn">
-					<span style="color: white; font-size: 27px; margin-right: 520px;"><b><u><a href="/">Home</a></u></b></span>
-					<span style="color: white; font-size: 27px;"><b>11 Post</b></span>
-					<span style="color: white; font-size: 27px;"><b>1.7m followers</b></span>
-					<span style="color: white; font-size: 27px;"><b>3.5k following</b></span>
-					<a href="" title="" data-ripple=""><button style="background-color: #ffc0cb; border: #ffc0cb;">Follow</button></a>
-					
+					<span style="color: white; font-size: 27px; margin-right: 500px;"><b><u><a href="/">Home</a></u></b></span>
+						{%if user_post_length == 0%}
+						<span style="color: white; font-size: 27px;"><b>No Post</b></span>
+						{%elif user_post_length == 1%}
+						<span style="color: white; font-size: 27px;"><b>1 Post</b></span>
+						{%else%}
+						<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Post</b></span>
+						{%endif%}
+
+					{% if user_followers == 0 or user_followers == 1 %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} follower</b></span>
+					{% else %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} followers</b></span>
+					{% endif %}
+
+					<span style="color: white; font-size: 27px;"><b>{{user_following}} following</b></span>
+
+					<input type="hidden" value="{{user.username}}" name ="follower"/>
+					<input type="hidden" value="{{user_object.username}}" name ="user"/>
+
+					{% if user_object.username == user.username %}
+					<a href="/settings" data-ripple="">Account Settings</a>
+					{% elif user_re == 2 %}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Pending</button></a>
+					{% elif user_re == 1 %}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Unfollow</button></a>
+					{% elif user_re == 0%}
+						<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">Follow</button></a>
+					{% endif %}
 					</div>
 				</form>
 
-				<!-- <form class="edit-phto">
-					<i class="fa fa-camera-retro"></i>
-					<label class="fileContainer">
-						Upload Cover Photo
-					<input type="file"/>
-					</label>
-				</form> -->
 				<div class="container-fluid">
 					<div class="row merged">
 						<div class="col-lg-2 col-sm-3">
 							<div class="user-avatar">
 								<figure>
-									<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 100%;" alt="">
-									<form class="edit-phto">
-										<i class="fa fa-camera-retro"></i>
-										<label class="fileContainer">
-											<a href="#account-settings">Upload Profile Photo</a>
-										</label>
-									</form>
+									<img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
 								</figure>
 							</div>
 						</div>
@@ -64,25 +79,9 @@
 							<div class="timeline-info">
 								<ul>
 									<li class="admin-name">
-									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>@username</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
-									  <!--<span>Group Admin</span>-->
-									</li>
-									<!--<li>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Go live!</a>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Music</a>
-										<a class="" href="emporium/index-3.html" title="" data-ripple="">Emporium</a>
-										<a class="" href="fitness/index.html" title="" data-ripple="">Health Inspection</a>
-										<a class="" href="settings/account-setting.html" title="" data-ripple="">Settings</a>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Upload</a>
-										<a class="" href="time-line.html" title="" data-ripple="">time line</a>
-										<a class="" href="timeline-photos.html" title="" data-ripple="">Photos</a>
-										<a class="" href="timeline-videos.html" title="" data-ripple="">Videos</a>
-										<a class="" href="timeline-friends.html" title="" data-ripple="">Friends</a>
-										<a class="" href="timeline-groups.html" title="" data-ripple="">Groups</a>
-										<a class="" href="about.html" title="" data-ripple="">about</a>
-										<a class="" href="#" title="" data-ripple="">more</a>
+									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>{{user_profile.user.username}}</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
 
-									</li>-->
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -92,13 +91,26 @@
 		</section><!-- top area -->
 		<section>
 			<div class="bio">
-				Bio goes here...
+				{{user_profile.bio}}
+				<br />
+				Follower's Request
+				{% if user_object.username == user.username %}
+				<form action="/friends" method="POST">
+					{% csrf_token %}
+				{% for suggestion in suggestions_username_profile_list %}
+					<input type="hidden" value="{{suggestion.user}}" name ="follower"/>  {{suggestion.user}}
+					<button type="submit" name="answer" value="yes" style="background-color: white; border: #ffc0cb;">Yes</button>
+					<button type="submit" name="answer" value="no" style="background-color: white; border: #ffc0cb;">No</button>
+					<br />
+				{% endfor %}
+				</form>
+				{% endif %}
 			</div>
 		</section>
 		
 	<section>
 		<div class="gap gray-bg">
-			<div class="container-fluid">
+			<div class="container m-auto">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="row" id="page-contents">
@@ -108,37 +120,74 @@
 									
 									
 								</aside>
-							</div><!-- sidebar -->
-							
-
-
-
-
-
-
-
-
+							</div>
+							<!-- sidebar -->
 
 							<div class="col-lg-6">
-								<div class="central-meta">
-									<ul class="photos">
-					
-										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
+								<!--<div class="central-meta">-->
+									<!--<ul class="photos">-->
+										{% for post in user_posts reversed %}
+										<div class="bg-white shadow rounded-md mb-2 -mx-2 lg:mx-0">
+                                                <div class="flex justify-between items-center px-4 py-3">
+                                                    <div class="flex flex-1 items-center space-x-4">
+                                                        <span class="block capitalize font-semibold "><a href="/profile/{{post.user}}"> @{{post.user}}</a> </span>
+                                                    </div>
+                                                </div>
+                                                <div uk-lightbox>
+                                                    <a href="{{post.image.url}}">
+                                                        <img src="{{post.image.url}}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="py-3 px-4 space-y-3">
+                                                    <div class="flex space-x-4 lg:font-bold">
+                                                        <a href="/like-post?post_id={{post.id}}" class="flex items-center space-x-2">
+                                                            <div class="p-2 rounded-full text-black">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                                                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                                </svg>
+                                                                {% if post.no_of_likes == 0 %}
+                                                                <p>No likes</p>
+                                                                {% elif post.no_of_likes == 1 %}
+                                                                <p>Liked by 1 person</p>
+                                                                {% else %}
+                                                                <p>Liked by {{post.no_of_likes}} people</p>
+                                                                {% endif %}
+                                                            </div>
+                                                        </a>
+                                                        <a href="/share?post_id={{post.id}}" class="flex items-center space-x-2 flex-1 justify-end">
+															<i class="uil-image-share mr-1"></i>
+															Share
+														</a>
+													</div>
 
-										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
+													<p>
+														<a herf="/profile/{{post.user}}"><strong>{{post.user}} </strong></a>{{post.caption}}
+													</p>
 
-										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
-										
-										
+
+													<div class="border-t pt-4 space-y-4 ">
+														{% for comment in post_comments %}
+														{% if comment.post_id == post.id_str %}
+															<div class="flex">
+																<div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 h-full relative lg:ml-5 ml-2 lg:mr-20   ">
+																	<p class="leading-6"><strong>{{comment.username}} </strong>{{comment.text}}
+																		{% if comment.username == user_profile.user.username %}
+																		<a href="/delete?comment_txt={{comment.text}}" class="ml-2 items-center text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
+																			<i class="uil-trash-alt"></i>
+																		</a>
+																		{% endif %}
+																	</p>
+																</div>
+															</div>
+														{% endif %}
+														{% endfor %}
+													</div>
+
+												</div>
+
+										</div>
+										{% endfor %}
+
 									</ul>
 									<!--<div class="lodmore"><button class="btn-view btn-load-more"></button></div>-->
 								</div><!-- photos -->
@@ -148,6 +197,7 @@
 									
 								</aside>
 							</div><!-- sidebar -->
+
 						</div>	
 					</div>
 				</div>
@@ -157,7 +207,7 @@
 
 	
 	
-	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="js/main.min.js"></script>
+	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'js/main.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
 
 </body>	

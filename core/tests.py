@@ -1,3 +1,4 @@
+# Calls Libraries
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
@@ -19,6 +20,7 @@ class TestCases(TestCase):
         self.profile.bio = "tests are the best"
         self.profile.location = "earth"
 
+        # Saves and outputs the users information for later use
         self.user.save()
         self.profile.save()
         print(
@@ -26,6 +28,7 @@ class TestCases(TestCase):
         print("[*] Created new Profile -> id: " + str(
             self.user.id) + ", bio: " + self.profile.bio + ", location: " + self.profile.location)
 
+        # Attempts to sign in using the created user
     def test_signin(self):
         print("\n[*] Testing signin...")
 

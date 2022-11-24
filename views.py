@@ -106,7 +106,6 @@ def listss(request):
     user_profile = Profile.objects.get(user=user_object)
     if request.method == 'POST':
         username = request.user.username
-
         user_following = FollowersCount.objects.filter(re=1)
 
         user_following_all = []

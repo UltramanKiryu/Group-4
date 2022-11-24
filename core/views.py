@@ -13,7 +13,6 @@ def index(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
 
-
     user_following_list = [request.user.username]
     feed = []
 
@@ -35,7 +34,7 @@ def index(request):
 
     post_comments = list(chain(*comments))
     
-    # user- suggestion start
+    # user-suggestion start
     all_users = User.objects.all()
     user_following_all = []
 
@@ -62,6 +61,9 @@ def index(request):
 
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,'suggestions_username_profile_list': suggestions_username_profile_list[:4], 'post_comments': post_comments})
 
+@login_required(login_url='signin')
+def events(request):
+    pass
 
 @login_required(login_url='signin')
 def upload(request):
@@ -96,6 +98,37 @@ def search(request):
             username_profile_list.append(profile_list)
 
         username_profile_list = list(chain(*username_profile_list))
+    return render(request,'search.html',{'user_profile': user_profile, 'username_profile_list': username_profile_list})
+
+@login_required(login_url='signin')
+def listss(request):
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+    if request.method == 'POST':
+        username = request.user.username
+        user_following = FollowersCount.objects.filter(re=1)
+
+        user_following_all = []
+        all_users = User.objects.all()
+        feed = []
+        for user in user_following:
+            user_list = User.objects.get(username=user.user)
+            user_following_all.append(user_list)
+        new_suggestions_list = [x for x in list(all_users) if(len(FollowersCount.objects.filter(user=request.user.username, re=1, follower=x)) == 1)]
+        current_user = User.objects.filter(username=request.user.username)
+        final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
+
+        username_profile = []
+        usernames_profile_list = []
+
+        for users in final_suggestions_list:
+            username_profile.append(users.id)
+
+        for ids in username_profile:
+            profile_lists = Profile.objects.filter(id_user=ids)
+            usernames_profile_list.append(profile_lists)
+        username_profile_list = list(chain(*usernames_profile_list))
+
     return render(request,'search.html',{'user_profile': user_profile, 'username_profile_list': username_profile_list})
 
 @login_required(login_url='signin')
@@ -188,13 +221,10 @@ def follow(request):
         follower = request.POST['follower']
         user = request.POST['user']
 
-
-
         if FollowersCount.objects.filter(follower=follower, user=user).first():
             FollowersCount.re = 0
             delete_follower = FollowersCount.objects.get(follower=follower, user=user)
             delete_follower.delete()
-
 
             return redirect('/profile/'+user)
         else:
@@ -220,6 +250,7 @@ def comment_post(request):
         return redirect('/')
     else:
         return redirect('/')
+
 
 @login_required(login_url='signin')
 def delete(request):

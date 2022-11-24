@@ -93,8 +93,13 @@
 			<div class="bio">
 				{{user_profile.bio}}
 				<br />
-				Follower's Request
 				{% if user_object.username == user.username %}
+				<form action="/listss" method="POST">
+					{% csrf_token %}
+				<button type="submit" value="{{user.username}}" name="username" style="background-color: white; border: #ffc0cb;">See Followers</button>
+				</form>
+				<br />
+				Follower's Request
 				<form action="/friends" method="POST">
 					{% csrf_token %}
 				{% for suggestion in suggestions_username_profile_list %}
@@ -106,8 +111,12 @@
 				</form>
 				{% endif %}
 			</div>
+
 		</section>
-		
+
+		<section>
+
+		</section>
 	<section>
 		<div class="gap gray-bg">
 			<div class="container m-auto">
@@ -194,7 +203,7 @@
 							</div><!-- centerl meta -->
 							<div class="col-lg-3">
 								<aside class="sidebar static">
-									
+
 								</aside>
 							</div><!-- sidebar -->
 

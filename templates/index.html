@@ -32,9 +32,6 @@
                             </a>
                         </div>
 
-                        <!--<div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
-                            <i class="uil-bars"></i>
-                        </div>-->
 
                         <!--<div class="header_search">-->
                             <input type="text" name="username" placeholder="Search for username..">&nbsp; &nbsp;
@@ -78,15 +75,12 @@
                                     </p>
                                     <div>
                                         <input type="file" name ="image_upload">
-                                       <!-- <a href="#" class="button soft-warning small"> Choose file</a>-->
                                         <textarea class="button soft-warning small" name ="caption" placeholder="caption..."></textarea>
                                         <br>
                                         <button class="button bg -blue 700" type ="submit">Upload</button>
                                     </div>
                                     </form>
-                                   <!-- <a href="#" class="uk-text-muted mt-3 uk-link"
-                                        uk-toggle="target: .choose-upload ;  animation: uk-animation-slide-right-small, uk-animation-slide-left-medium; queued: true">
-                                        Or Import Video </a>-->
+
                                 </div>
     
                                 <div class="uk-flex uk-flex-column choose-upload" hidden>
@@ -113,63 +107,68 @@
                                 Your Video size Must be Maxmium 999MB
                             </div>
                         </div>
-                        
-                         <!-- Notification -->
-
-                        <!--<a href="#" class="header-links-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none"><path d="M12 22a2.02 2.02 0 0 1-2.01-2h4a2.02 2.02 0 0 1-.15.78a2.042 2.042 0 0 1-1.44 1.18h-.047A1.922 1.922 0 0 1 12 22zm8-3H4v-2l2-1v-5.5a8.065 8.065 0 0 1 .924-4.06A4.654 4.654 0 0 1 10 4.18V2h4v2.18c2.579.614 4 2.858 4 6.32V16l2 1v2z" fill="currentColor"/></g></svg>
+                        <!-- Event Post -->
+                        <div class="right-side lg:pr-4">
+                        <a href="#"
+                            class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                            <ion-icon name="add-circle" class="-mb-1
+                             mr-1 opacity-90 text-xl uilus-circle"></ion-icon> Event Post
                         </a>
-                        <div uk-drop="mode: click;offset: 4" class="header_dropdown">
-                            <h4
-                                class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
-                                Notification </h4>
-                            <ul class="dropdown_scrollbar" data-simplebar>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar"> <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt="">
+                         <!-- Event upload dropdown box -->
+                        <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+                             <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                                <h4>Post Event</h4>
+                            </div>
+                            <!-- notification contents -->
+
+                            <div class="flex justify-center flex-center text-center">
+
+                                <div class="flex flex-col choose-upload text-center">
+
+                                   <!--<div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg  ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                        </svg>
+                                    </div>-->
+                                    <form action ="events" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                    <p class="my-3 leading-6"> Event Post
+                                    </p>
+                                    <div>
+                                        <input type="file" name ="image_upload">
+                                        <textarea class="button soft-warning small" name ="caption" placeholder="caption..."></textarea>
+                                        <br>
+                                        <button class="button bg -blue 700" name="answer" value="public" type ="submit">Public Post</button>
+                                        <button class="button bg -blue 700" name="answer" value="private" type ="submit">Private Post</button>
+                                    </div>
+                                    </form>
+
+                                </div>
+
+                                <div class="uk-flex uk-flex-column choose-upload" hidden>
+                                    <div class="mx-auto flex flex-col h-24 items-center justify-center relative w-full rounded-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                            <path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <p class="my-3 leading-6"> Import videos from YouTube <br> Copy / Paste your video link here </p>
+                                    <form class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-expand">
+                                            <input type="text" class="uk-input uk-form-small  bg-gray-200 " style="box-shadow:none" placeholder="Paste link">
                                         </div>
-                                        <div class="drop_content">
-                                            <p> <strong class="text-link" >Taiye</strong>  
-                                                <span class="text-link"> is following you  </span>
-                                            </p>
-                                            <span class="time-ago"> 2 hours ago </span>
-                                        </div>
-                                    </a>
-                                </li>
-                                
+                                        <div class="uk-width-auto"> <button type="submit" class="button soft-warning -ml-2">
+                                                Import </button> </div>
+                                    </form>
+                                    <a href="#" class="uk-text-muted mt-3 uk-link"
+                                        uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">
+                                        Or Upload Video </a>
+                                </div>
 
-                            </ul>
-                            <a href="#" class="see-all">See all</a>
-                        </div>-->
-
-                        <!-- Messages -->
-
-                        <!--<a href="#" class="header-links-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="0.5em" height="0.5em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><g fill="currentColor"><path d="M2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/></g></svg>
-                        </a>
-                        <div uk-drop="mode: click;offset: 4" class="header_dropdown">
-                            <h4
-                                class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
-                                Messages </h4>
-                            <ul class="dropdown_scrollbar" data-simplebar>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar"> <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt="">
-                                        </div>
-                                        <div class="drop_content">
-                                            <strong> Taiye </strong> <time> 6:43 PM</time>
-                                            <p> hi tomi </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                
-
-
-                            </ul>
-                            <a href="#" class="see-all">See all</a>
+                            </div>
                         </div>
 
-                        -->
+                        </div>
 
                         <!-- profile -->
 
@@ -185,12 +184,12 @@
                         </div>
 
                     </div>
+
                 </div>
             </header>
 
             <div class="container m-auto">
 
-                <!--<h1 class="lg:text-2xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-5"> Feed </h1>--->
 
                 <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5">
 
@@ -308,12 +307,7 @@
                                         </div>
                                         
                                     </a>
-                                    <!--<a href="#" class="flex items-center space-x-2">
-                                        <div class="p-2 rounded-full text-black">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
-                                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
+
                                         
                                     </a>-->
                                     <a href="/share?post_id={{post.id}}" class="flex items-center space-x-2 flex-1 justify-end">
@@ -353,13 +347,6 @@
                                     </form>
                                 </div>
 
-                               <!-- <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
-                                    <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
-                                    <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
-                                        <a href="#"> <i class="uil-image"></i></a>
-                                        <a href="#"> <i class="uil-video"></i></a>
-                                    </div>
-                                </div>-->
     
                             </div>
 

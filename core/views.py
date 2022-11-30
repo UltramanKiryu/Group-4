@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Profile,Post,LikePost,FollowersCount,Comment
+from .models import Profile,Post,LikePost,FollowersCount,Comment,EventPost,AttendingEvent,RvspEvent
 from itertools import chain
 import random
 
@@ -16,7 +16,9 @@ def index(request):
     user_following_list = [request.user.username]
     feed = []
 
+
     user_following = FollowersCount.objects.filter(follower=request.user.username, re=1)
+    userss_following = FollowersCount.objects.filter(user=request.user.username, re=1)
 
     for users in user_following:
         user_following_list.append(users.user)
@@ -26,6 +28,20 @@ def index(request):
         feed.append(feed_lists)
 
     feed_list = list(chain(*feed))
+
+    # event post display
+    event_following = EventPost.objects.filter(po_lvl=0)
+    ww = []
+    event = []
+    for users in event_following:
+        ww.append(users.user)
+
+    for usernames in ww:
+        ee = EventPost.objects.filter(user=usernames,po_lvl=0)
+        event.append(ee)
+    event_list = list(chain(*event))
+
+    # comment section
     comments = []
 
     for posts in feed_list:
@@ -59,11 +75,67 @@ def index(request):
 
     suggestions_username_profile_list = list(chain(*username_profile_list))
 
-    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,'suggestions_username_profile_list': suggestions_username_profile_list[:4], 'post_comments': post_comments})
+    return render(request, 'index.html', {'user_profile': user_profile, 'events': event_list,'posts': feed_list,'suggestions_username_profile_list': suggestions_username_profile_list[:4], 'post_comments': post_comments})
 
 @login_required(login_url='signin')
 def events(request):
-    pass
+    if request.method =='POST':
+        user = request.user.username
+        image = request.FILES.get('image_upload')
+        caption = request.POST['caption']
+        location = request.POST['location']
+        ans = request.POST['answer']
+        if ans == 'public':
+            ## when the user wants the post to appear in every user post feed
+            new_event = EventPost.objects.create(user=user, image=image,po_lvl=0,location=location, caption=caption)
+            new_event.id_str = new_event.id
+            new_event.save()
+        elif ans == 'private':
+            ## when the user wants only the people who follow the user to see the event
+            new_event = EventPost.objects.create(user=user, image=image,po_lvl=0, location=location, caption=caption)
+            new_event.id_str = new_event.id
+            new_event.save()
+    return redirect('/')
+
+@login_required(login_url='signin')
+def attendingEvent(request):
+    username = request.user.username
+    event_id = request.GET.get('event_id')
+
+    event = EventPost.objects.get(id=event_id)
+
+    like_filter = AttendingEvent.objects.filter(event_id=event_id, username=username).first()
+    if like_filter == None:
+        new_attend = AttendingEvent.objects.create(event_id=event_id, username=username)
+        new_attend.save()
+        event.no_of_attending = event.no_of_attending + 1
+        event.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        event.no_of_attending = event.no_of_attending - 1
+        event.save()
+        return redirect('/')
+
+@login_required(login_url='signin')
+def rsvpEvent(request):
+    username = request.user.username
+    event_id = request.GET.get('event_id')
+
+    event = EventPost.objects.get(id=event_id)
+
+    like_filter = RvspEvent.objects.filter(event_id=event_id, username=username).first()
+    if like_filter == None:
+        new_attend = RvspEvent.objects.create(event_id=event_id, username=username)
+        new_attend.save()
+        event.no_of_rvsp = event.no_of_rvsp + 1
+        event.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        event.no_of_rvsp = event.no_of_rvsp - 1
+        event.save()
+        return redirect('/')
 
 @login_required(login_url='signin')
 def upload(request):
@@ -72,7 +144,7 @@ def upload(request):
         image = request.FILES.get('image_upload')
         caption = request.POST['caption']
 
-        new_post = Post.objects.create(user=user, image=image, caption=caption)
+        new_post = EventPost.objects.create(user=user, image=image, caption=caption)
         new_post.id_str = new_post.id
         new_post.save()
 
@@ -104,30 +176,55 @@ def search(request):
 def listss(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+    username = request.user.username
     if request.method == 'POST':
-        username = request.user.username
-        user_following = FollowersCount.objects.filter(re=1)
+        follower = request.POST['type']
+        if follower == 'followers':
+            user_following = FollowersCount.objects.filter(re=1)
 
-        user_following_all = []
-        all_users = User.objects.all()
-        feed = []
-        for user in user_following:
-            user_list = User.objects.get(username=user.user)
-            user_following_all.append(user_list)
-        new_suggestions_list = [x for x in list(all_users) if(len(FollowersCount.objects.filter(user=request.user.username, re=1, follower=x)) == 1)]
-        current_user = User.objects.filter(username=request.user.username)
-        final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
+            user_following_all = []
+            all_users = User.objects.all()
+            feed = []
+            for user in user_following:
+                user_list = User.objects.get(username=user.user)
+                user_following_all.append(user_list)
+            new_suggestions_list = [x for x in list(all_users) if (len(FollowersCount.objects.filter(user=request.user.username, re=1, follower=x)) == 1)]
+            current_user = User.objects.filter(username=request.user.username)
+            final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
 
-        username_profile = []
-        usernames_profile_list = []
+            username_profile = []
+            usernames_profile_list = []
 
-        for users in final_suggestions_list:
-            username_profile.append(users.id)
+            for users in final_suggestions_list:
+                username_profile.append(users.id)
 
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user=ids)
-            usernames_profile_list.append(profile_lists)
-        username_profile_list = list(chain(*usernames_profile_list))
+            for ids in username_profile:
+                profile_lists = Profile.objects.filter(id_user=ids)
+                usernames_profile_list.append(profile_lists)
+            username_profile_list = list(chain(*usernames_profile_list))
+        elif follower == 'following':
+            user_following = FollowersCount.objects.filter(re=1)
+
+            user_following_all = []
+            all_users = User.objects.all()
+            feed = []
+            for user in user_following:
+                user_list = User.objects.get(username=user.user)
+                user_following_all.append(user_list)
+            new_suggestions_list = [x for x in list(all_users) if (len(FollowersCount.objects.filter(user=x, re=1, follower=request.user.username)) == 1)]
+            current_user = User.objects.filter(username=request.user.username)
+            final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
+
+            username_profile = []
+            usernames_profile_list = []
+
+            for users in final_suggestions_list:
+                username_profile.append(users.id)
+
+            for ids in username_profile:
+                profile_lists = Profile.objects.filter(id_user=ids)
+                usernames_profile_list.append(profile_lists)
+            username_profile_list = list(chain(*usernames_profile_list))
 
     return render(request,'search.html',{'user_profile': user_profile, 'username_profile_list': username_profile_list})
 
@@ -250,7 +347,6 @@ def comment_post(request):
         return redirect('/')
     else:
         return redirect('/')
-
 
 @login_required(login_url='signin')
 def delete(request):

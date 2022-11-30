@@ -23,12 +23,12 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     id_str = models.CharField(max_length=500, default="")
     user = models.CharField(max_length=50)
+    po_lvl = models.IntegerField(default=0)
     o_user = models.CharField(max_length=50, default="")
     image = models.ImageField(upload_to='post_images')
     caption = models.TextField(max_length=50)
     created_at = models.DateTimeField(default=datetime.datetime.now)
     no_of_likes = models.IntegerField(default=0)
-
 
     def _str_(self):
         return self.user
@@ -42,7 +42,7 @@ class Comment(models.Model):
         return self.username
 
 class LikePost(models.Model):
-    post_id=models.CharField(max_length=500)
+    post_id = models.CharField(max_length=500)
     username = models.CharField(max_length=100)
 
     def _str_(self):
@@ -56,3 +56,31 @@ class FollowersCount(models.Model):
     def _str_(self):
         return self.user
 
+class EventPost(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id_str = models.CharField(max_length=500, default="")
+    user = models.CharField(max_length=50)
+    po_lvl = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='post_images')
+    caption = models.TextField(max_length=50)
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    no_of_rvsp = models.IntegerField(default=0)
+    no_of_attending = models.IntegerField(default=0)
+    location = models.CharField(max_length=100, blank=True)
+
+    def _str_(self):
+        return self.user
+
+class AttendingEvent(models.Model):
+    event_id = models.CharField(max_length=500)
+    username = models.CharField(max_length=100)
+
+    def _str_(self):
+        return self.username
+
+class RvspEvent(models.Model):
+    event_id = models.CharField(max_length=500)
+    username = models.CharField(max_length=100)
+
+    def _str_(self):
+        return self.username

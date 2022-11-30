@@ -96,7 +96,9 @@
 				{% if user_object.username == user.username %}
 				<form action="/listss" method="POST">
 					{% csrf_token %}
-				<button type="submit" value="{{user.username}}" name="username" style="background-color: white; border: #ffc0cb;">See Followers</button>
+				<button type="submit" value="followers" name="type" style="background-color: white; border: #ffc0cb;">See Followers</button>
+				<br />
+				<button type="submit" value="following" name="type" style="background-color: white; border: #ffc0cb;">See Following</button>
 				</form>
 				<br />
 				Follower's Request

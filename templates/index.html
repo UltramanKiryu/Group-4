@@ -62,13 +62,7 @@
                             <div class="flex justify-center flex-center text-center">
     
                                 <div class="flex flex-col choose-upload text-center">
-                                   
-                                   <!--<div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg  ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                                        </svg>
-                                    </div>-->
+
                                     <form action ="upload" method="POST" enctype="multipart/form-data">
                                         {% csrf_token %}
                                     <p class="my-3 leading-6"> Upload pics
@@ -138,9 +132,10 @@
                                     <div>
                                         <input type="file" name ="image_upload">
                                         <textarea class="button soft-warning small" name ="caption" placeholder="caption..."></textarea>
+                                        <textarea class="button soft-warning small" name ="location" placeholder="location..."></textarea>
                                         <br>
-                                        <button class="button bg -blue 700" name="answer" value="public" type ="submit">Public Post</button>
-                                        <button class="button bg -blue 700" name="answer" value="private" type ="submit">Private Post</button>
+                                        <button class="button bg -blue 700" name="answer" value="public" type="submit">Public Post</button>
+                                        <button class="button bg -blue 700" name="answer" value="private" type="submit">Private Post</button>
                                     </div>
                                     </form>
 
@@ -188,7 +183,81 @@
                 </div>
             </header>
 
+
             <div class="container m-auto">
+                <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5">
+
+                    <!-- left sidebar-->
+                    <div class="space-y-5 flex-shrink-0 lg:w-8/12">
+
+                        <!-- event 1-->
+
+                        {% for event in events reversed %}
+                        <div class="bg-white shadow rounded-md -mx-2 lg:mx-0">
+
+                            <!-- post header-->
+                            <div class="flex justify-between items-center px-4 py-3">
+                                <div class="flex flex-1 items-center space-x-4">
+
+                                    <span class="block font-semibold "><a href="/profile/{{event.user}}">@{{event.user}}</a></span>
+                                </div>
+
+                            </div>
+
+                            <div uk-lightbox>
+                                <a href="{{event.image.url}}">
+                                    <img src="{{event.image.url}}" alt="">
+                                </a>
+                            </div>
+
+
+                            <div class="py-3 px-4 space-y-3">
+
+                                <div class="flex space-x-4 lg:font-bold">
+                                    <a href="/rsvpEvent?event_id={{event.id}}" class="flex items-center space-x-2">
+                                        <div class="p-2 rounded-full text-black">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
+                                             {% if event.no_of_rvsp == 0 %}
+                                            <p>0 people reserved</p>
+                                            {% elif event.no_of_rvsp == 1 %}
+                                            <p>Reserved by 1 person</p>
+                                            {% else %}
+                                            <p>Liked by {{event.no_of_rvsp}} people</p>
+                                         {% endif %}
+                                        </div>
+
+                                    </a>
+                                    <a href="/attendingEvent?event_id={{event.id}}" class="flex items-center space-x-2 flex-1 justify-end">
+                                        <div class="p-2 rounded-full text-black">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
+                                             {% if event.no_of_attending == 0 %}
+                                            <p>0 people are attending</p>
+                                            {% elif event.no_of_attending == 1 %}
+                                            <p>1 person is attending</p>
+                                            {% else %}
+                                            <p>{{event.no_of_attending}} people are attending</p>
+                                         {% endif %}
+                                        </div>
+                                    </a>
+                                </div>
+                                <p>
+                                    <a href="#"><strong>Location:</strong></a> {{event.location}}
+                                </p>
+
+
+                                <p>
+                                    <a href="/profile/{{event.user}}"><strong>{{event.user}}</strong></a> {{event.caption}}
+                                </p>
+
+
+                            </div>
+
+                        </div>
+                        {% endfor %}
 
 
                 <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5">
@@ -215,7 +284,7 @@
                                 <div>
                                 <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
                                 <div class=" bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
-                              
+
                                     <ul class="space-y-1">
                                         <a href="/delete?post_id={{post.id}}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
                                         <i class="uil-trash-alt mr-1"></i>  Delete
@@ -225,7 +294,7 @@
                                         <i class="uil-edit mr-1"></i>  Edit
                                        </a>
                                         <div uk-drop="pos: bottom-left;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
-                                                <!-- notivication header -->
+                                                <!-- Edit header -->
                                                 <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
                                                     <h4>Edit Post</h4>
                                                 </div>
@@ -276,7 +345,7 @@
                                         </form>
                                       </li>
                                     </ul>
-                                
+
                                 </div>
                               </div>
                                 {% endif %}
@@ -354,7 +423,7 @@
                     {% endfor %}
 
                     <!-- right sidebar-->
-                    <div class="lg:w-5/12">
+                    <div class="lg:w-8/12">
 
                         <div class="bg-white  shadow-md rounded-md overflow-hidden">
 
